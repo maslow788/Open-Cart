@@ -12,7 +12,7 @@ class ModelCatalogProduct extends Model {
 		return $query->rows;
 	}
 	
-	public function getProductsByCategoryId($category_id, $sort = 'pd.name', $order = 'ASC', $start = 0, $limit = 20) {
+	public function getProductsByCategoryId($category_id, $sort = 'pd.name', $order = 'ASC', $start = 0, $limit = 20, $manufacturer_id = false) {
                 $sql = "
                     SELECT *, pd.name AS name, p.image, m.name AS manufacturer, ss.name AS stock, (SELECT AVG(r.rating)
                     FROM " . DB_PREFIX . "review r
@@ -28,7 +28,11 @@ class ModelCatalogProduct extends Model {
                             AND p2s.store_id = '" . (int) $this->config->get('config_store_id') . "'
                             AND ss.language_id = '" . (int) $this->config->get('config_language_id') . "'
                             AND p2c.category_id = '" . (int) $category_id . "'";
-		
+
+		if ($manufacturer_id !== false) {
+                    $sql .= "AND m.manufacturer_id = '" . (int) $manufacturer_id . "'";
+                }
+
 		$sort_data = array(
 			'pd.name',
 			'p.price',
