@@ -136,7 +136,8 @@ class ModelCatalogProduct extends Model {
 				$start = 0;
 			}
 		
-			$sql .= " LIMIT " . (int)$start . "," . (int)$limit;
+                        if ($limit !== false) $sql .= " LIMIT " . (int) $limit;
+                        if ($start !== false) $sql .= " OFFSET " . (int) $start;
 
 			$query = $this->db->query($sql);
 		
